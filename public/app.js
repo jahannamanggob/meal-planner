@@ -22,6 +22,8 @@ let onboardingCompleted = !!localStorage.getItem("onboardingDone");
 let meals = [];
 let favorites = JSON.parse(localStorage.getItem("userFavorites") || "[]");
 
+const API = "http://localhost:5000"; // ← single place to change if port changes
+
 const recipeDatabase = {
   classic: "https://www.allrecipes.com/",
   lowcarb: "https://www.dietdoctor.com/low-carb/recipes",
@@ -213,7 +215,7 @@ function attachOnboardingEvents() {
       const pass = document.getElementById("loginPassword").value;
       if (!email || !pass) { alert("Enter email and password"); return; }
       try {
-        const res = await fetch("/api/auth/login", {
+        const res = await fetch(`${API}/api/auth/login`, { // ← FIXED
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password: pass })
@@ -233,24 +235,26 @@ function attachOnboardingEvents() {
         alert("Server error. Make sure your backend is running.");
       }
     });
+
     document.getElementById("showRegisterBtn")?.addEventListener("click", () => {
       const regDiv = document.getElementById("registerFields");
       regDiv.style.display = regDiv.style.display === "none" ? "block" : "none";
     });
-   document.getElementById("doRegisterBtn")?.addEventListener("click", async () => {
+
+    document.getElementById("doRegisterBtn")?.addEventListener("click", async () => {
       const name = document.getElementById("regName")?.value;
       const email = document.getElementById("regEmail")?.value;
       const pass = document.getElementById("regPassword")?.value;
       if (!name || !email || !pass) { alert("Please fill in all fields"); return; }
       try {
-        const res = await fetch("/api/auth/signup", {
+        const res = await fetch(`${API}/api/auth/signup`, { // ← FIXED
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password: pass })
         });
         const data = await res.json();
         if (res.ok) {
-          const loginRes = await fetch("/api/auth/login", {
+          const loginRes = await fetch(`${API}/api/auth/login`, { // ← FIXED
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password: pass })
@@ -481,7 +485,8 @@ function renderMealPlanner(mainDiv) {
       });
     });
   };
-document.querySelectorAll(".rec-badge").forEach(badge => {
+
+  document.querySelectorAll(".rec-badge").forEach(badge => {
     badge.addEventListener("click", () => {
       const name = badge.getAttribute("data-name");
       const cal = autoCalorieFromName(name);
@@ -738,5 +743,4 @@ function attachNavEvents() {
   if (storedUser) currentUser = JSON.parse(storedUser);
   if (localStorage.getItem("userMeals")) meals = JSON.parse(localStorage.getItem("userMeals"));
   renderApp();
-}
-)();
+})();
