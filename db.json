@@ -4,16 +4,6 @@
       "email": "jahcolen",
       "password": "$2b$10$a8Es16XLClDBB7r.jIsJGuF1MzTkTBFBJrlwEyEZrUDl1lbLhgP7m",
       "id": "6uijMczhdCU"
-    },
-    {
-      "email": "test@test.com",
-      "password": "$2b$10$ytjgtBgjPnHhw953r38aO.eVrw2nFPsaoRnIwCRMtULRKTnAjDZRm",
-      "id": "9rGZCrPdh5E"
-    },
-    {
-      "email": "juegosmanggobjahanna@gmail.com",
-      "password": "$2b$10$5Q0oU2R.YYKuESmsYo/61.2sZK3XW9.p0M00yoLC3nLyMcVnD9sti",
-      "id": "T_MMludqZoQ"
     }
   ],
   "plans": [
@@ -35,6 +25,5 @@
       "date": "2026-05-10",
       "id": "gpsOesooguw"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
