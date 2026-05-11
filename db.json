@@ -1,0 +1,29 @@
+{
+  "users": [
+    {
+      "email": "jahcolen",
+      "password": "$2b$10$a8Es16XLClDBB7r.jIsJGuF1MzTkTBFBJrlwEyEZrUDl1lbLhgP7m",
+      "id": "6uijMczhdCU"
+    }
+  ],
+  "plans": [
+    {
+      "meal": "Lean Beef Steak",
+      "calories": 271,
+      "date": "2026-05-26",
+      "id": "aC22UTlsK78"
+    },
+    {
+      "meal": "Adobo",
+      "calories": 300,
+      "date": "2026-05-08",
+      "id": "NOkjIwh_N0w"
+    },
+    {
+      "meal": "Matcha Latte",
+      "calories": 190,
+      "date": "2026-05-10",
+      "id": "gpsOesooguw"
+    }
+  ]
+}
