@@ -237,7 +237,7 @@ function attachOnboardingEvents() {
       const regDiv = document.getElementById("registerFields");
       regDiv.style.display = regDiv.style.display === "none" ? "block" : "none";
     });
-    document.getElementById("doRegisterBtn")?.addEventListener("click", async () => {
+   document.getElementById("doRegisterBtn")?.addEventListener("click", async () => {
       const name = document.getElementById("regName")?.value;
       const email = document.getElementById("regEmail")?.value;
       const pass = document.getElementById("regPassword")?.value;
@@ -273,7 +273,7 @@ function attachOnboardingEvents() {
     });
     return;
   }
-  
+
   let selectedDiet = "classic";
   let selectedAllergies = [];
   let selectedDislikes = [];
@@ -481,9 +481,7 @@ function renderMealPlanner(mainDiv) {
       });
     });
   };
-
-  // Clickable recommendations
-  document.querySelectorAll(".rec-badge").forEach(badge => {
+document.querySelectorAll(".rec-badge").forEach(badge => {
     badge.addEventListener("click", () => {
       const name = badge.getAttribute("data-name");
       const cal = autoCalorieFromName(name);
@@ -740,4 +738,5 @@ function attachNavEvents() {
   if (storedUser) currentUser = JSON.parse(storedUser);
   if (localStorage.getItem("userMeals")) meals = JSON.parse(localStorage.getItem("userMeals"));
   renderApp();
-})();
+}
+)();
