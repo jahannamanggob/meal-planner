@@ -208,39 +208,72 @@ function renderOnboardingOrLogin() {
 
 function attachOnboardingEvents() {
   if (!token) {
-    document.getElementById("doLoginBtn")?.addEventListener("click", () => {
+    document.getElementById("doLoginBtn")?.addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value;
       const pass = document.getElementById("loginPassword").value;
-      if (email && pass) {
-        const fakeToken = btoa(email + Date.now());
-        localStorage.setItem("token", fakeToken);
-        localStorage.setItem("user", JSON.stringify({ email, name: email.split('@')[0] }));
-        token = fakeToken;
-        currentUser = { email, name: email.split('@')[0] };
-        onboardingCompleted = false;
-        renderApp();
-      } else alert("Enter email and password");
+      if (!email || !pass) { alert("Enter email and password"); return; }
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: pass })
+        });
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify({ email, name: email.split('@')[0] }));
+          token = data.token;
+          currentUser = { email, name: email.split('@')[0] };
+          onboardingCompleted = false;
+          renderApp();
+        } else {
+          alert(data.message || "Login failed. Check your credentials.");
+        }
+      } catch (err) {
+        alert("Server error. Make sure your backend is running.");
+      }
     });
     document.getElementById("showRegisterBtn")?.addEventListener("click", () => {
       const regDiv = document.getElementById("registerFields");
       regDiv.style.display = regDiv.style.display === "none" ? "block" : "none";
     });
-    document.getElementById("doRegisterBtn")?.addEventListener("click", () => {
+    document.getElementById("doRegisterBtn")?.addEventListener("click", async () => {
       const name = document.getElementById("regName")?.value;
       const email = document.getElementById("regEmail")?.value;
       const pass = document.getElementById("regPassword")?.value;
-      if (name && email && pass) {
-        localStorage.setItem("token", btoa(email));
-        localStorage.setItem("user", JSON.stringify({ name, email }));
-        token = btoa(email);
-        currentUser = { name, email };
-        onboardingCompleted = false;
-        renderApp();
-      } else alert("Please fill in all fields");
+      if (!name || !email || !pass) { alert("Please fill in all fields"); return; }
+      try {
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: pass })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          const loginRes = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password: pass })
+          });
+          const loginData = await loginRes.json();
+          if (loginData.token) {
+            localStorage.setItem("token", loginData.token);
+            localStorage.setItem("user", JSON.stringify({ name, email }));
+            token = loginData.token;
+            currentUser = { name, email };
+            onboardingCompleted = false;
+            renderApp();
+          }
+        } else {
+          alert(data.message || "Signup failed. Try a different email.");
+        }
+      } catch (err) {
+        alert("Server error. Make sure your backend is running.");
+      }
     });
     return;
   }
-
+  
   let selectedDiet = "classic";
   let selectedAllergies = [];
   let selectedDislikes = [];
