@@ -26,6 +26,9 @@ exports.login = async (req, res) => {
     const user = await User.findByEmail(email);
     if (!user) return res.status(400).json({ message: "User not found" });
 
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) return res.status(400).json({ message: "Email already registered" });
+
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Wrong password" });
 
